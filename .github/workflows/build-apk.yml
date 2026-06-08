@@ -29,28 +29,23 @@ jobs:
         run: flutter --version
 
       - name: Accept Android licenses
-        working-directory: bondly_flutter
         run: yes | flutter doctor --android-licenses || true
 
       - name: Make gradlew executable
-        working-directory: bondly_flutter
         run: chmod +x android/gradlew
 
       - name: Install dependencies
-        working-directory: bondly_flutter
         run: flutter pub get
 
       - name: Analyze code
-        working-directory: bondly_flutter
         run: flutter analyze --no-fatal-infos || true
 
       - name: Build release APK
-        working-directory: bondly_flutter
         run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: bondly-release-apk
-          path: bondly_flutter/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
