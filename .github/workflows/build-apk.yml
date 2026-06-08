@@ -33,15 +33,11 @@ jobs:
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
           echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
 
-      - name: Fix Gradle wrapper JAR
+      - name: Regenerate Gradle wrapper
         run: |
-          WRAPPER=$(find "$FLUTTER_ROOT" -name "gradle-wrapper.jar" 2>/dev/null | head -1)
-          if [ -n "$WRAPPER" ]; then
-            cp "$WRAPPER" android/gradle/wrapper/gradle-wrapper.jar
-            echo "Copied gradle-wrapper.jar from: $WRAPPER"
-          else
-            echo "Warning: Could not find gradle-wrapper.jar in Flutter SDK"
-          fi
+          wget -q https://services.gradle.org/distributions/gradle-8.3-bin.zip -P /tmp
+          unzip -q /tmp/gradle-8.3-bin.zip -d /tmp
+          cd android && /tmp/gradle-8.3/bin/gradle wrapper --gradle-version 8.3
 
       - name: Accept Android licenses
         run: yes | flutter doctor --android-licenses || true
