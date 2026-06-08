@@ -29,7 +29,9 @@ jobs:
         run: flutter --version
 
       - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+          echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
 
       - name: Fix Gradle wrapper JAR
         run: |
