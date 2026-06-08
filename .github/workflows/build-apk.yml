@@ -28,6 +28,19 @@ jobs:
       - name: Flutter version
         run: flutter --version
 
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+
+      - name: Fix Gradle wrapper JAR
+        run: |
+          WRAPPER=$(find "$FLUTTER_ROOT" -name "gradle-wrapper.jar" 2>/dev/null | head -1)
+          if [ -n "$WRAPPER" ]; then
+            cp "$WRAPPER" android/gradle/wrapper/gradle-wrapper.jar
+            echo "Copied gradle-wrapper.jar from: $WRAPPER"
+          else
+            echo "Warning: Could not find gradle-wrapper.jar in Flutter SDK"
+          fi
+
       - name: Accept Android licenses
         run: yes | flutter doctor --android-licenses || true
 
